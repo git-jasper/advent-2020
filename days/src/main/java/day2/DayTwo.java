@@ -10,8 +10,8 @@ public class DayTwo {
         List<String> lines = ReaderUtil.read("days/src/main/resources/day2/input.txt");
         System.out.println("Part one:");
         System.out.println(dayTwo.partOne(lines));
-        System.out.println("-----");
-        System.out.println("Part two");
+        System.out.println("----------");
+        System.out.println("Part two:");
         System.out.println(dayTwo.partTwo(lines));
     }
 
