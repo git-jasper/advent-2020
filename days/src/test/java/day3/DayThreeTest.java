@@ -12,7 +12,6 @@ class DayThreeTest {
     private final List<String> lines = ReaderUtil.read("src/main/resources/day3/test.txt");
     private final DayThree dayThree = new DayThree();
 
-
     @Test
     void partOne() {
         int trees = dayThree.partOne(lines);
