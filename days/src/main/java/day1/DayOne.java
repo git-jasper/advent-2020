@@ -33,6 +33,9 @@ public class DayOne {
             int first = Integer.parseInt(firstNum);
             for (String secondNum : lines) {
                 int second = Integer.parseInt(secondNum);
+                if (first + second >= 2020) {
+                    continue;
+                }
                 for (String thirdNum : lines) {
                     int third = Integer.parseInt(thirdNum);
                     if (first + second + third == 2020) {
