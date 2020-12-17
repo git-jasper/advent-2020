@@ -3,9 +3,9 @@ package day8;
 public class Result {
 
     private final boolean success;
-    private final long accumulator;
+    private final Accumulator accumulator;
 
-    public Result(boolean success, long accumulator) {
+    public Result(boolean success, Accumulator accumulator) {
         this.success = success;
         this.accumulator = accumulator;
     }
@@ -14,7 +14,7 @@ public class Result {
         return success;
     }
 
-    public long getAccumulator() {
+    public Accumulator getAccumulator() {
         return accumulator;
     }
 }

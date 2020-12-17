@@ -18,98 +18,58 @@ public class DayEight {
     }
 
     public long partOne(List<String> lines) {
-        HashSet<Integer> indices = new HashSet<>();
-        long accumulator = 0;
-        for (int i = 0; i < lines.size();) {
-            if (indices.contains(i)) {
-                System.out.println(i);
-                break;
-            }
-            indices.add(i);
-            String[] instructions = lines.get(i).split(" ");
-            String operation = instructions[0];
-            int argument = Integer.parseInt(instructions[1]);
-            switch (operation) {
-                case "acc": {
-                    accumulator += argument;
-                    i++;
-                    break;
-                }
-                case "jmp": {
-                    i += argument;
-                    break;
-                }
-                case "nop": {
-                    i++;
-                    break;
-                }
-            }
-
-        }
-        return accumulator;
+        Result result = runSequence(lines, new NoOpReplacer());
+        return result.getAccumulator().getValue();
     }
 
     public long partTwo(List<String> lines) {
-        Result result = new Result(false, -1);
         for (int e = 0; e < lines.size(); e++) {
-            Result attempt = runSequence(lines, "jmp", "nop", e);
+            Result attempt = runSequence(lines, new InstructionReplacer("jmp", "nop", e));
             if (attempt.isSuccess()) {
-                System.out.println("jmp -> nop, encounter: " + e);
-                result = attempt;
-                break;
+                return attempt.getAccumulator().getValue();
             }
         }
-        if (result.isSuccess()) {
-            return result.getAccumulator();
-        }
         for (int e = 0; e < lines.size(); e++) {
-            Result attempt = runSequence(lines, "nop", "jmp", e);
+            Result attempt = runSequence(lines, new InstructionReplacer("nop", "jmp", e));
             if (attempt.isSuccess()) {
-                System.out.println("nop -> jmp, encounter: " + e);
-                result = attempt;
-                break;
+                return attempt.getAccumulator().getValue();
             }
-        };
-        return result.getAccumulator();
+        }
+        return -1;
     }
 
-    private Result runSequence(List<String> lines, String original, String replacement, int encounter) {
+    private Result runSequence(List<String> lines, Replacer replacer) {
         HashSet<Integer> indices = new HashSet<>();
-        int originalEncounters = 0;
-        long accumulator = 0;
-        boolean success = true;
-        for (int i = 0; i < lines.size();) {
-            if (indices.contains(i)) {
-                success = false;
+        Accumulator accumulator = new Accumulator(0);
+        Index index = new Index(0);
+        do {
+            int value = index.getValue();
+            if (indices.contains(value)) {
+                return new Result(false, accumulator);
+            }
+            indices.add(value);
+            Instruction instruction = new Instruction(lines.get(value));
+            Instruction replace = replacer.replace(instruction);
+            performInstruction(replace, accumulator, index);
+        } while (index.getValue() < lines.size());
+        return new Result(true, accumulator);
+    }
+
+    private void performInstruction(Instruction replace, Accumulator accumulator, Index index) {
+        switch (replace.getOperation()) {
+            case "acc": {
+                accumulator.accumulate(replace.getArgument());
+                index.increment(1);
                 break;
             }
-            indices.add(i);
-            String[] instructions = lines.get(i).split(" ");
-            String operation = instructions[0];
-            if (operation.equals(original)) {
-                if (originalEncounters == encounter) {
-                    operation = replacement;
-                }
-                originalEncounters++;
+            case "jmp": {
+                index.increment(replace.getArgument());
+                break;
             }
-            int argument = Integer.parseInt(instructions[1]);
-            switch (operation) {
-                case "acc": {
-                    accumulator += argument;
-                    i++;
-                    break;
-                }
-                case "jmp": {
-                    i += argument;
-                    break;
-                }
-                case "nop": {
-                    i++;
-                    break;
-                }
+            case "nop": {
+                index.increment(1);
+                break;
             }
-
         }
-        return new Result(success, accumulator);
     }
 }
