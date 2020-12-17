@@ -54,7 +54,7 @@ public class DaySeven {
         return processBags(lines).values().stream().filter(bag -> bag.contains("shiny gold")).count() - 1;
     }
 
-    public int partTwo(List<String> lines) {
+    public long partTwo(List<String> lines) {
         return processBags(lines).get("shiny gold").countBags();
     }
 }

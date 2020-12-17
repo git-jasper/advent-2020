@@ -21,7 +21,7 @@ class DaySevenTest {
 
     @Test
     void partTwo() {
-        int amount = daySeven.partTwo(linesPartTwo);
+        long amount = daySeven.partTwo(linesPartTwo);
         assertEquals(126, amount);
     }
 }
