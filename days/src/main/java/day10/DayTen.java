@@ -46,32 +46,36 @@ public class DayTen {
     }
 
     public long partTwo(List<String> lines) {
+        HashMap<Long, Long> paths = initPaths(lines);
+        Pointer pointer = new Pointer();
+        do {
+            pointer.next();
+            checkWays(paths, pointer, paths.get(pointer.position()));
+        } while (pointer.hasNext());
+        return paths.get(pointer.position());
+    }
+
+    private void checkWays(HashMap<Long, Long> paths, Pointer pointer, Long value) {
+        // check joltage 3 times (for 3, 2, 1 difference)
+        checkJoltage(paths, pointer, value);
+        checkJoltage(paths, pointer, value);
+        checkJoltage(paths, pointer, value);
+    }
+
+    private void checkJoltage(HashMap<Long, Long> paths, Pointer pointer, Long value) {
+        long jolt = pointer.decrement();
+        if (paths.containsKey(jolt)) {
+            paths.put(jolt, value + paths.get(jolt));
+            pointer.update();
+        }
+    }
+
+    private HashMap<Long, Long> initPaths(List<String> lines) {
         HashMap<Long, Long> paths = new HashMap<>();
         paths.put(0L, 1L);
         lines.forEach(line-> {
             paths.put(Long.parseLong(line), 0L);
         });
-        long current = 0;
-        int index = 0;
-        while (index < paths.size()) {
-            long output = current;
-            long jolt = current+4;
-            Long value = paths.get(current);
-            if (paths.containsKey(--jolt)) {
-                paths.put(jolt, value + paths.get(jolt));
-                output = jolt;
-            }
-            if (paths.containsKey(--jolt)) {
-                paths.put(jolt, value + paths.get(jolt));
-                output = jolt;
-            }
-            if (paths.containsKey(--jolt)) {
-                paths.put(jolt, value + paths.get(jolt));
-                output = jolt;
-            }
-            current = output;
-            index++;
-        }
-        return paths.get(current);
+        return paths;
     }
 }
