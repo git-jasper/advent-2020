@@ -24,7 +24,7 @@ public class DayTen {
             adapters.add(Long.parseLong(line));
         });
         JoltageMeter joltageMeter = new JoltageMeter();
-        Long output = 0L;
+        long output = 0L;
         int index = 0;
         while (index < adapters.size()) {
             if (adapters.contains(++output)) {
