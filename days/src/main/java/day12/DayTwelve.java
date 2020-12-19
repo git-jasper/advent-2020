@@ -8,7 +8,7 @@ public class DayTwelve {
 
     public static void main(String[] args) {
         DayTwelve dayTwelve = new DayTwelve();
-        List<String> lines = ReaderUtil.read("days/src/main/resources/day11/input.txt");
+        List<String> lines = ReaderUtil.read("days/src/main/resources/day12/input.txt");
         System.out.println("Part one:");
         System.out.println(dayTwelve.partOne(lines));
         System.out.println("----------");
@@ -17,10 +17,18 @@ public class DayTwelve {
     }
 
     public long partOne(List<String> lines) {
-        return -1;
+        Map map = new Map();
+        for (String line : lines) {
+            map.move(line);
+        }
+        return map.getDistance();
     }
 
     public long partTwo(List<String> lines) {
-        return -1;
+        Map map = new Map();
+        for (String line : lines) {
+            map.movePartTwo(line);
+        }
+        return map.getDistance();
     }
 }
